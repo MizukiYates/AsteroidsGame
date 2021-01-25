@@ -2,12 +2,17 @@
 Star[] stars = new Star[200];
 Spaceship johnathan = new Spaceship();
 boolean wPressed, aPressed, dPressed;
+ArrayList <Asteroid> asteroids;
 
 public void setup() 
 {
   size (500,500);
   for (int i = 0; i < stars.length; i++){
     stars[i] = new Star();
+  }
+  asteroids = new ArrayList <Asteroid>();
+  for (int i = 0; i < 10; i++) {
+    asteroids.add(new Asteroid());
   }
 }
 public void draw() 
@@ -24,7 +29,16 @@ public void draw()
     johnathan.turn(-5);
   if(dPressed)
     johnathan.turn(5); 
-
+    
+ for (int i = 0; i < asteroids.size(); i++) {
+      asteroids.get(i).move();
+      asteroids.get(i).show();
+    }
+ 
+ if (asteroids.size() == 0) {
+    textSize(30);
+    text("You win!", width/2, height/2);
+  }
 fill(255);
   textSize(15);
   text("X Coordinate: " + nf((float)johnathan.myCenterX, 0, 2) +
