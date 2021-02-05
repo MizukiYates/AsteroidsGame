@@ -5,8 +5,10 @@ boolean wPressed, aPressed, dPressed, ePressed;
 ArrayList <Asteroid> asteroids;
 int gameScreen = 0;
 StopWatch sw;
+ColorFade fc;
 public void setup() 
 {
+  fc = new ColorFade( color(0, 0, 255), color(255,0,0), 4000,1500);
   size (1750,1300);
     for (int i = 0; i < stars.length; i++){
     stars[i] = new Star();
@@ -16,6 +18,7 @@ public void setup()
     asteroids.add(new Asteroid());
   }
 }
+
 public void draw() 
 {
   if (gameScreen == 0) {
@@ -30,17 +33,30 @@ public void draw()
     loadingScreen();
   }
 }
+public void keyReleased()
+{
+  if(key == 'w')
+    wPressed = false;
+  else if(key == 'a')
+    aPressed = false;
+  else if(key == 'd')
+    dPressed = false;
+    color cr = color(random(255), random(255), random(255));
+  // change the target color to a random color (and restart timer)
+  fc.set(cr);
+}
 void initScreen() {
   background(0);
-  textAlign(CENTER);
+  textAlign(CENTER,CENTER);
   textSize(30);
+  fill(fc.c());
   text("Asteroid Arcade Game",width/2,300);
   fill(25);
-  rect(825,615,100,50);
+  rect(825,630,100,50);
   fill(255);
   text("Start", width/2, height/2);
   fill(25);
-  rect(800,915,150,50);
+  rect(800,930,150,50);
   fill(255);
   text("Controls",width/2, 950);
   for (int i= 0; i< stars.length; i++) {
@@ -93,13 +109,16 @@ void loadingScreen(){
 void optionsScreen() {
   background(0);
   textSize(50);
-  text("Back", 200, 200);
+  fill(25);
+  rect(0,0,125,55);
+  fill(255);
+  text("Back", 50, 20);
   text("Controls:", width/2, 300);
   text("Forward: W", width/2, 350);
   text("Turn Left: A", width/2, 400);
   text("Turn Right: D", width/2, 450);
   text("Stop: S", width/2, 500);
-  text("Hyperspace(teleport): E", width/2, 550);
+  text("Hyperspace(Teleport): E", width/2, 550);
 }
 void loadGame(){
   gameScreen = 4;
@@ -121,7 +140,7 @@ public void mousePressed() {
   if (gameScreen==0 && mouseX >= 750 && mouseX <= 950 && mouseY >= 850 && mouseY <= 1050) {
     options();
   }
-  if (gameScreen==3 && mouseX >= 100 && mouseX <= 250 && mouseY >= 100 && mouseY <= 250) {
+  if (gameScreen==3 && mouseX >= 0 && mouseX <= 100 && mouseY >= 0 && mouseY <= 120) {
     back();
   }
   //if (gameScreen == 4 && second == 1)
@@ -141,14 +160,4 @@ public void keyPressed()
     dPressed = true;
   else if(key == 'e')
     johnathan.hyperspace();
-}
-
-public void keyReleased()
-{
-  if(key == 'w')
-    wPressed = false;
-  else if(key == 'a')
-    aPressed = false;
-  else if(key == 'd')
-    dPressed = false;
 }
