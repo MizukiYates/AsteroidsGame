@@ -2,47 +2,86 @@
 Star[] stars = new Star[500];
 Spaceship johnathan = new Spaceship();
 boolean wPressed, aPressed, dPressed, ePressed;
+boolean dataLoaded = false ;
 ArrayList <Asteroid> asteroids;
 ArrayList <Bullet> shots = new ArrayList<Bullet>();
-int gameScreen = 0;
+int gameScreen = 1;
 StopWatch sw;
 ColorFade fc;
 import processing.sound.*;
 import processing.core.PApplet;
-SoundFile file;
+SoundFile file1;
+SoundFile file2;
+float nowPlaying = 0;
+float circleX = 800;
+float circleY = 775;
+float xSpeed = 5;
+float ySpeed = 0;
+
 public void setup() 
 {
-  float asteroidsize = random(30);
+  thread("loadData");
+  background(0);
   fc = new ColorFade( color(0, 0, 255), color(255, 0, 0), 4000, 1500);
   size (1750, 1300);
+  
   for (int i = 0; i < stars.length; i++) {
     stars[i] = new Star();
-  }
-  asteroids = new ArrayList <Asteroid>();
-  for (int i = 0; i < asteroidsize; i++) {
-    asteroids.add(new Asteroid());
   }
   for (int i = 0; i < 0; i++) {
     shots.add(new Bullet(johnathan));
   }
-  //file = new SoundFile(this, "zap.mp3");
-}
 
+}
+public void setup2()
+{
+  float asteroidsize = random(30)+10;
+  asteroids = new ArrayList <Asteroid>();
+  for (int i = 0; i < asteroidsize; i++) {
+    asteroids.add(new Asteroid());
+  }
+}
 public void draw() 
 {
-  if (gameScreen == 0) {
-    initScreen();
-  } else if (gameScreen == 1) {
-    gameScreen();
-  } else if (gameScreen == 2) {
-    gameOverScreen();
+  if(dataLoaded) {
+    if (gameScreen == 1) {
+      initScreen();
+    } else if (gameScreen == 2) {
+      gameScreen();
+    } else if (gameScreen == 3) {
+      gameOverScreen();
+    }
+    if (gameScreen == 4) {
+      optionsScreen();
+    }
+    if (gameScreen == 5) {
+      loadingScreen();
+    } 
+  }else {
+    background(0);
+    fill(255);
+    textSize(50);
+    text("Loading...", 800, height/2);
+    fill(25);
+    rect(800,750,200,50);
+    fill(255);
+    ellipse(circleX, circleY, 50, 50);
+
+  // modify state
+  circleX = circleX + xSpeed;
+
+  //bounce off left and right
+  if(circleX < 800 || circleX > 1000) {
+    xSpeed = xSpeed * -1;
   }
-  if (gameScreen == 3) {
-    optionsScreen();
+
   }
-  if (gameScreen == 4) {
-    loadingScreen();
-  }
+  
+}
+void loadData(){
+  file1 = new SoundFile(this, "music.mp3");
+  file2 = new SoundFile(this, "chill.mp3");
+  dataLoaded = true ;
 }
 public void keyReleased()
 {
@@ -62,6 +101,22 @@ void initScreen() {
   textSize(30);
   fill(fc.c());
   text("Asteroid Arcade Game", width/2, 300);
+  fill(255);
+  text("Music:", 1300, 50);
+  if ( mouseX >= 1450 && mouseX <= 1500 && mouseY >= 25 && mouseY <= 75) {
+    fill(255,0,0);
+    rect(1475, 50, 30, 30);
+  }else {
+    fill(255);
+    rect(1475, 50, 30, 30);
+  }
+  if ( mouseX >= 1400 && mouseX <= 1435 && mouseY >= 45 && mouseY <= 75) {
+    fill(255,0,0);
+    triangle(1400, 45, 1400, 75, 1435, 60);
+  }else {
+    fill(255);
+    triangle(1400, 45, 1400, 75, 1435, 60);
+  }
   if (mouseX >= 750 && mouseX <= 950 && mouseY >= 550 && mouseY <= 750) {
     fill(50);
     rect(825, 630, 100, 50);
@@ -157,7 +212,7 @@ void gameScreen() {
 
 
   if (asteroids.size() == 0) {
-    gameScreen = 2;
+    gameScreen = 3;
   }
   fill(255);
   textSize(15);
@@ -221,35 +276,41 @@ void optionsScreen() {
   text("Shoot: Spacebar", width/2, 600);
 }
 void loadGame() {
-  gameScreen = 4;
+  gameScreen = 5;
 }
 void startGame() {
-  gameScreen=1;
+  gameScreen=2;
 }
 void options() {
-  gameScreen=3;
+  gameScreen=4;
 }
 void back() {
-  gameScreen=0;
+  gameScreen=1;
 }
 public void mousePressed() {
-  if (gameScreen==0 && mouseX >= 750 && mouseX <= 950 && mouseY >= 1050 && mouseY <= 1250) {
+  if ( mouseX >= 1450 && mouseX <= 1500 && mouseY >= 25 && mouseY <= 75) {
+    file1.stop();
+  }
+  if (gameScreen == 1 && mouseX >= 1400 && mouseX <= 1435 && mouseY >= 45 && mouseY <= 75) {
+    file1.play();
+  }
+  if (gameScreen==1 && mouseX >= 750 && mouseX <= 950 && mouseY >= 1050 && mouseY <= 1250) {
     exit();
   }
-  if (gameScreen==2 && mouseX >= 750 && mouseX <= 950 && mouseY >= 1050 && mouseY <= 1250) {
+  if (gameScreen==3 && mouseX >= 750 && mouseX <= 950 && mouseY >= 1050 && mouseY <= 1250) {
     back();
   }
-  if (gameScreen==0 && mouseX >= 750 && mouseX <= 950 && mouseY >= 550 && mouseY <= 750) {
+  if (gameScreen==1 && mouseX >= 750 && mouseX <= 950 && mouseY >= 550 && mouseY <= 750) {
     startGame();
-    setup();
+    setup2();
   }
-  if (gameScreen==0 && mouseX >= 750 && mouseX <= 950 && mouseY >= 850 && mouseY <= 1050) {
+  if (gameScreen==1 && mouseX >= 750 && mouseX <= 950 && mouseY >= 850 && mouseY <= 1050) {
     options();
   }
-  if (gameScreen==3 && mouseX >= 0 && mouseX <= 100 && mouseY >= 0 && mouseY <= 120) {
+  if (gameScreen==4 && mouseX >= 0 && mouseX <= 100 && mouseY >= 0 && mouseY <= 120) {
     back();
   }
-  if (gameScreen==1 && mouseX >= 0 && mouseX <= 100 && mouseY >= 0 && mouseY <= 120) {
+  if (gameScreen==2 && mouseX >= 0 && mouseX <= 100 && mouseY >= 0 && mouseY <= 120) {
     back();
   }
   //if (gameScreen == 4 && second == 1)
