@@ -23,15 +23,15 @@ public void setup()
   thread("loadData");
   background(0);
   fc = new ColorFade( color(0, 0, 255), color(255, 0, 0), 4000, 1500);
-  size (1750, 1300);
-  
+  size (1750, 1300, P2D);
+  frameRate(30);
+  noStroke();
   for (int i = 0; i < stars.length; i++) {
     stars[i] = new Star();
   }
   for (int i = 0; i < 0; i++) {
     shots.add(new Bullet(johnathan));
   }
-
 }
 public void setup2()
 {
@@ -43,7 +43,7 @@ public void setup2()
 }
 public void draw() 
 {
-  if(dataLoaded) {
+  if (dataLoaded) {
     if (gameScreen == 1) {
       initScreen();
     } else if (gameScreen == 2) {
@@ -56,29 +56,39 @@ public void draw()
     }
     if (gameScreen == 5) {
       loadingScreen();
-    } 
-  }else {
+    }
+  } else {
     background(0);
     fill(255);
     textSize(50);
     text("Loading...", 800, height/2);
-    fill(25);
-    rect(800,750,200,50);
-    fill(255);
-    ellipse(circleX, circleY, 50, 50);
-
-  // modify state
-  circleX = circleX + xSpeed;
-
-  //bounce off left and right
-  if(circleX < 800 || circleX > 1000) {
-    xSpeed = xSpeed * -1;
+    blendMode(ADD);
+    float barheight = 0;
+    for (float i = 0; i < 1; i += 1 / 16.0) {
+    fill(#ff0000);
+    barheight = inOutSin(tri(timeLoop(60, i * 60))) * 100;
+    rect(600 + i * 640, 900 - barheight, 32, barheight);
+    fill(#00ff00);
+    barheight = inOutSin(tri(timeLoop(60, i * 60 + 20))) * 100;
+    rect(600 + i * 640, 900 - barheight, 32, barheight);
+    fill(#0000ff);
+    barheight = inOutSin(tri(timeLoop(60, i * 60 + 40))) * 100;
+    rect(600 + i * 640, 900 - barheight, 32, barheight);
+    }
   }
-
-  }
-  
 }
-void loadData(){
+float timeLoop(float totalframes, float offset) {
+  return (frameCount + offset) % totalframes / totalframes;
+}
+
+float tri(float t) {
+  return t < 0.5 ? t * 2 : 2 - (t * 2);
+}
+
+float inOutSin(float t) {
+  return 0.5 - cos(PI * t) / 2;
+}
+void loadData() {
   file1 = new SoundFile(this, "music.mp3");
   file2 = new SoundFile(this, "chill.mp3");
   dataLoaded = true ;
@@ -104,16 +114,16 @@ void initScreen() {
   fill(255);
   text("Music:", 1300, 50);
   if ( mouseX >= 1450 && mouseX <= 1500 && mouseY >= 25 && mouseY <= 75) {
-    fill(255,0,0);
+    fill(255, 0, 0);
     rect(1475, 50, 30, 30);
-  }else {
+  } else {
     fill(255);
     rect(1475, 50, 30, 30);
   }
   if ( mouseX >= 1400 && mouseX <= 1435 && mouseY >= 45 && mouseY <= 75) {
-    fill(255,0,0);
+    fill(255, 0, 0);
     triangle(1400, 45, 1400, 75, 1435, 60);
-  }else {
+  } else {
     fill(255);
     triangle(1400, 45, 1400, 75, 1435, 60);
   }
