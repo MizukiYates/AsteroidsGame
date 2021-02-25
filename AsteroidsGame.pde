@@ -65,15 +65,15 @@ public void draw()
     blendMode(ADD);
     float barheight = 0;
     for (float i = 0; i < 1; i += 1 / 16.0) {
-    fill(#ff0000);
-    barheight = inOutSin(tri(timeLoop(60, i * 60))) * 100;
-    rect(600 + i * 640, 900 - barheight, 32, barheight);
-    fill(#00ff00);
-    barheight = inOutSin(tri(timeLoop(60, i * 60 + 20))) * 100;
-    rect(600 + i * 640, 900 - barheight, 32, barheight);
-    fill(#0000ff);
-    barheight = inOutSin(tri(timeLoop(60, i * 60 + 40))) * 100;
-    rect(600 + i * 640, 900 - barheight, 32, barheight);
+      fill(#ff0000);
+      barheight = inOutSin(tri(timeLoop(60, i * 60))) * 100;
+      rect(600 + i * 640, 900 - barheight, 32, barheight);
+      fill(#00ff00);
+      barheight = inOutSin(tri(timeLoop(60, i * 60 + 20))) * 100;
+      rect(600 + i * 640, 900 - barheight, 32, barheight);
+      fill(#0000ff);
+      barheight = inOutSin(tri(timeLoop(60, i * 60 + 40))) * 100;
+      rect(600 + i * 640, 900 - barheight, 32, barheight);
     }
   }
 }
@@ -214,11 +214,11 @@ void gameScreen() {
   johnathan.show();
   johnathan.move();
   if (wPressed)
-    johnathan.accelerate(0.1);
+    johnathan.accelerate(0.5);
   if (aPressed)
-    johnathan.turn(-5);
+    johnathan.turn(-10);
   if (dPressed)
-    johnathan.turn(5); 
+    johnathan.turn(10); 
 
 
   if (asteroids.size() == 0) {
@@ -298,7 +298,7 @@ void back() {
   gameScreen=1;
 }
 public void mousePressed() {
-  if ( mouseX >= 1450 && mouseX <= 1500 && mouseY >= 25 && mouseY <= 75) {
+  if (mouseX >= 1450 && mouseX <= 1500 && mouseY >= 25 && mouseY <= 75) {
     file1.stop();
   }
   if (gameScreen == 1 && mouseX >= 1400 && mouseX <= 1435 && mouseY >= 45 && mouseY <= 75) {
