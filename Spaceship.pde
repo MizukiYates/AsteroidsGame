@@ -1,6 +1,6 @@
 class Spaceship extends Floater  
 {
-  Spaceship()
+  public Spaceship()
   {
     corners = 3;
     myColor = 180;
@@ -12,7 +12,11 @@ class Spaceship extends Floater
     myYspeed = 0;
     myPointDirection = 0;
   }
-  
+  public float getX() {return (int)myCenterX;}
+  public float getY() {return (int)myCenterY;}
+  public float getPointDirection() {return (int)myPointDirection;}
+  public float getXSpeed() {return (int)myXspeed;}
+  public float getYSpeed() {return (int)myYspeed;}
   void hyperspace()
   {
     myXspeed= 0;
