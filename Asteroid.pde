@@ -5,8 +5,8 @@ class Asteroid extends Floater
   {
     corners = 8;
     myColor = color(255);
-    myCenterX = 200;
-    myCenterY = 200;
+    myCenterX = width/2;
+    myCenterY = height/2;
     //random speeds
     myXspeed = (Math.random() * 8) - 5; 
     myYspeed = (Math.random() * 8) - 5;
@@ -35,6 +35,11 @@ class Asteroid extends Floater
     yCorners[6] = (int)(Math.random() * 3) - 3;
     yCorners[7] = (int)(Math.random() * 4) + 8;
   }
+  public float getX() {return (int)myCenterX;}
+  public float getY() {return (int)myCenterY;}
+  public float getPointDirection() {return (int)myPointDirection;}
+  public float getXSpeed() {return (int)myXspeed;}
+  public float getYSpeed() {return (int)myYspeed;}
   public void move()
   {
     myPointDirection += rotationSpeed;//turn asteroid
